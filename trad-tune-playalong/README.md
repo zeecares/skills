@@ -20,7 +20,7 @@ Comparison sources:
 
 ## License
 
-The original instructions in this repository are available under the [MIT license](LICENSE). That license does not cover music, scans, recordings or other third-party material used with the workflow.
+The original instructions in this repository are available under the [MIT license](../LICENSE). That license does not cover music, scans, recordings or other third-party material used with the workflow.
 
 ## Install
 
