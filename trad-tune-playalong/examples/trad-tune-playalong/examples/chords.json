@@ -1,0 +1,15 @@
+{
+  "tune": "Example Reel",
+  "key": "D",
+  "status": "suggested",
+  "bars": [
+    { "bar": 1, "chords": ["D"] },
+    { "bar": 2, "chords": ["A"] },
+    { "bar": 3, "chords": ["D"] },
+    { "bar": 4, "chords": ["A", "D"] }
+  ],
+  "shapes": {
+    "mandolin": { "D": "0230", "A": "2245" },
+    "guitar":   { "D": "xx0232", "A": "x02220" }
+  }
+    }
