@@ -1,0 +1,27 @@
+<!doctype html>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Play-along</title>
+<h1>Example Reel</h1>
+<div id="chord">-</div>
+<audio id="a" src="tune.mp3"></audio>
+<button id="play">Play</button>
+<input id="seek" type="range" min="0" max="1000" value="0" style="width:100%">
+<span id="t">0:00</span>
+<select id="speed"><option>0.75</option><option selected>1</option><option>1.5</option></select>
+<script>
+// bars: start time in seconds at 1x, and chord. Generate this from chords.json.
+const bars = [{t:0,c:"D"},{t:1.9,c:"A"},{t:3.8,c:"D"},{t:5.7,c:"A"}];
+const a = document.getElementById("a"), seek = document.getElementById("seek");
+a.preservesPitch = true;
+document.getElementById("play").onclick = () => a.paused ? a.play() : a.pause();
+document.getElementById("speed").onchange = e => a.playbackRate = +e.target.value;
+seek.oninput = () => { a.currentTime = seek.value / 1000 * a.duration; };
+a.ontimeupdate = () => {
+  seek.value = a.currentTime / a.duration * 1000;
+  document.getElementById("t").textContent = Math.floor(a.currentTime/60)+":"+String(Math.floor(a.currentTime%60)).padStart(2,"0");
+  const b = bars.filter(x => x.t <= a.currentTime).pop();
+  document.getElementById("chord").textContent = b ? b.c : "-"; // same lookup after a seek
+};
+// Pause any other player on the page when this one starts.
+document.addEventListener("play", e => document.querySelectorAll("audio").forEach(x => x !== e.target && x.pause()), true);
+</script>
