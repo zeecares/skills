@@ -4,6 +4,12 @@ A reusable skill for turning sheet music into a mobile play-along practice page.
 
 The workflow covers tools and fallbacks, melody transcription, chord checks, scan cleanup, synthesized audio, a bar-following cursor, speed controls, chord diagrams and a pass/fail checklist. Examples are in [examples/](examples/).
 
+## Playback and delivery
+
+The workflow now includes selected-tune loading, one shared multi-part clock, per-instrument mutes, pitch-preserving speed, isolated best-effort iOS audio routing, failure-path tests and full-mix peak audits. The trad pack adds jig/reel guitar patterns and beginner D-whistle guidance.
+
+The HTML example is a single-track sketch, not the production multi-part engine. Keep editable source and binary release assets reproducible, work through reviewed PRs, and distinguish desktop emulation from real phone testing.
+
 ## Use
 
 Read [SKILL.md](SKILL.md), or add it to a coding assistant that supports Markdown skills. Supply sheet music you have permission to use and ask for a play-along practice page. The assistant needs suitable image, audio, coding and browser capabilities to carry out the steps.
@@ -29,3 +35,9 @@ No package install. Copy this folder into your agent's skills directory, such as
 ```
 cp -r trad-tune-playalong .claude/skills/
 ```
+
+## Whistle references
+
+For fingering-chart work, start with Grey Larsen's D-whistle chart: https://greylarsen.com/FreeDownloads/Fingering_Chart_with_Half-Hole_Fingerings.pdf . Its note says whistle pitches sound one octave above the written notes. Check whether a supplied sheet follows that convention before labeling octaves or comparing with piano.
+
+Readable scale, register and alternate-fingering explanation: https://soundovia.com/tin-whistle-fingering-chart/ . Use a tuner on the actual whistle to check C natural and upper-register variants; do not copy diagrams without checking reuse rights.
