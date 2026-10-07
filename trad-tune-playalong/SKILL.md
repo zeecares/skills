@@ -47,13 +47,29 @@ State in your report which tools you used and which fallbacks you took.
 - Check durations and opening pitches programmatically, and listen when possible. State exactly what was and was not checked. Never imply an unheard render was checked by ear.
 
 ## 5. Build the mobile practice page
-- Per piece: title, sheet with full-size view, optional chord panel, then a compact player. Skeleton: [examples/player.html](examples/player.html).
+- Per piece: title, sheet with full-size view, optional chord panel, then a compact player. Single-track sketch: [examples/player.html](examples/player.html). It is not a multi-part engine; do not duplicate its audio elements for every tune and instrument.
 - Player: play/pause, a draggable seek bar, current and total time, pitch-preserving speed controls.
 - Play-along cursor: follows bars through the count-in, pickups, repeats and endings. Seeking and speed changes update both the cursor and current chord.
 - Chord diagrams for the requested instrument (guitar, ukulele, mandolin and so on). Check every displayed voicing produces the named chord, with string order and fret numbers clear.
 - Allow only one piece to play at a time.
 - Aim to fit a card on a phone screen without making notation unreadable. Preserve a full-size sheet view; allow scrolling for long or dense sheets.
 - Match the requested visual style.
+
+## 5a. Multi-part playback and iOS
+- Use one AudioContext and one shared clock for melody, accompaniment, drum, count-in, cursor and chord changes. Start sources at the same scheduled time. Do not run independent HTML audio clocks.
+- Load and decode only the selected tune's parts. Stop old sources, cancel stale loads and release decoded and speed-rendered buffers on tune switch. Never preload a book as 110 audio elements.
+- Give each part its own gain and mute control. Mute changes gain, not its clock or playback position. Label active states accessibly and keep controls inside the phone width.
+- Preserve pitch during speed changes with a tested overlap/add time-stretcher (or another verified method). AudioBufferSource playbackRate alone changes pitch. Map stretched time back to the original score; rebuild all parts together after speed changes or seeking.
+- Call AudioContext.resume() synchronously from the real Play gesture, before asynchronous loading or optional media setup. Only start parts and advance the cursor when the context is running; suspended/interrupted audio must not show false progress.
+- Treat navigator.audioSession.type='playback' and a media-element unlock as optional routing hints. Isolate session access/assignment, Audio construction, play() synchronous throws and promise rejections, and cleanup in their own error handling. Never await optional play(), include it in Promise.all with resume(), or let it reject/delay the Web Audio path. A pending media promise must not hang Play.
+- Judge success by context.state after the gesture resume attempt. A resume rejection with an already-running context need not block it. Error only when the required context cannot run, not when optional routing fails. Keep cleanup safe on pause, end and failure.
+- Test normal start, audioSession getter/setter throws, media constructor throw, media play synchronous throw, rejection and permanently pending promise, cleanup throw, resume rejection with running context, and resume rejection or resolution with suspended context. The latter must block sources and cursor. Test interruption during playback too.
+- Chrome mobile emulation is layout and logic evidence, not iPhone Safari or silent-switch proof. Check real hardware with silent mode both on and off when possible; report the gap otherwise. Do not claim a specific phone decoder failure without a captured trace.
+
+## 5b. Mix audit
+- Balance actual part energy, not only slider numbers. Keep accompaniment behind melody and make rhythm audible. Meter/RMS targets are project choices, not a universal artistic standard.
+- Audit every full mix, not a single demo: measure part RMS and sample peaks, then oversampled peaks to catch inter-sample overs. Compute headroom from the actual speed-rendered buffers; protect every mute combination (a per-sample absolute-sum bound is one conservative method).
+- Recheck after speed changes, part replacement and gain changes. State sample and oversampled peak results separately; listening remains a separate check.
 
 ## 6. Verify and deliver
 Run this checklist. Each item is pass or fail; report any fail instead of shipping around it.
@@ -66,10 +82,19 @@ Run this checklist. Each item is pass or fail; report any fail instead of shippi
 - [ ] At 390px: no horizontal overflow, no clipped text, sheet readable.
 - [ ] Scrubbing both ways puts the cursor and chord right at known bar lines, including repeats.
 - [ ] Play/pause, speed change and track switching work; only one piece plays at once.
+- [ ] Mixer mutes affect only the named part; seek, speed and switching keep all parts on the shared clock.
+- [ ] Optional iOS routing failure tests pass; suspended/interrupted contexts do not advance sources or cursor.
+- [ ] All full mixes and supported speed settings have documented sample and oversampled headroom.
 - [ ] Final report lists what was heard by ear and what was not.
 - [ ] Rights check below done; link returns the working page.
 
 Choose hosting by access, asset size, licensing and maintenance needs. A static page needs no server code. Publish only to the intended audience. Keep source files for later edits. Distinguish simulated pointer checks from real phone touch tests.
+
+## 7. Keep the source reproducible
+- Version editable text sources and tune/chord/timing metadata, not only a bundled page. When using a source JSON snapshot, include a restore script and exact install/build commands.
+- Put large audio/image binaries in versioned release assets when they do not belong in git. Record asset names, checksums, source revision and restore order; test a clean restore/build against the published version.
+- Make one capability per branch/PR. Never commit directly to main. Self-review against the pre-change parent, fix catches with regression tests and report them. Merge only on the owner's approval or an applicable standing grant.
+- A small patch applied after a baseline restore is acceptable if its base version is explicit and its output is checked byte-for-byte. Release notes must distinguish source changes, asset changes and already-published changes.
 
 ## Rights and limitations
 - Check permission before publishing scans, arrangements, recordings or copied chord material. Traditional melodies do not automatically make a modern edition or recording free to redistribute.
