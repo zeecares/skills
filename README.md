@@ -6,7 +6,7 @@ Agent skills by Ziyi Wang. One folder per skill. Each has a `SKILL.md` in the Ag
 | --- | --- |
 | [trad-tune-playalong](trad-tune-playalong/) | Turn sheet music into a play-along page: chords, audio, and printable PDFs. Irish trad specifics live in its `trad/` folder. |
 | [verification-skill-builder](verification-skill-builder/) | Study a repo and write a project-local skill that teaches agents to prove the app works by driving it. |
-| [comment-audit](comment-audit/) | Audit comments in a repo or diff: delete the ones the code already says, flag the ones that hide a workaround so you fix the cause. |
+| [comment-audit](comment-audit/) | Audit comments in a repo or diff: delete the ones the code already says, flag the ones that hide a workaround so you fix the cause. Audit only until you say apply. |
 
 ## Install
 
@@ -45,7 +45,7 @@ skill-name/
 
 verification-skill-builder was written after studying Cursor's create-verification-skill: https://github.com/cursor/plugins/blob/main/pstack/skills/create-verification-skill/SKILL.md
 
-comment-audit adapts, in new words, the rules of Lauren Tan's `no-comments` skill and `comment-sicko` agent (pstack, MIT, copyright Lauren Tan 2026): https://github.com/cursor/plugins/tree/main/pstack
+comment-audit adapts, in new words, the rules of Lauren Tan's `no-comments` skill and `comment-sicko` agent (pstack, MIT, copyright Lauren Tan 2026): https://github.com/cursor/plugins/tree/main/pstack. Her copyright and permission notice are in [comment-audit/NOTICE](comment-audit/NOTICE).
 
 ## License
 
